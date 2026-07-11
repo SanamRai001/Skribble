@@ -1,23 +1,17 @@
-import express from 'express'
-import http, { Server } from 'http'
+import http from 'http';
+import { Server } from 'socket.io';
 import 'dotenv/config'
-import  cors from 'cors'
+import app  from './app.js'
 
-const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
-app.use(cors({
+const io = new Server(server, {
+    cors:{
     origin: process.env.CLIENT_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
-}));
-app.use(morgan('dev'));
-
-app.get("/", (req,res)=>{
-    res.send("Hello World to backend.");
-})
+}});
 
 const port = process.env.PORT || 5000
-app.listen(port,()=>{
+server.listen(port,()=>{
     console.log(`The backend is running on: http://localhost:${port}`)
 })
